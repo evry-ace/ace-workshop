@@ -1,4 +1,4 @@
-# ace-workshop
+# ACE Workshop 2019
 
 Template for ACE Workshop
 
