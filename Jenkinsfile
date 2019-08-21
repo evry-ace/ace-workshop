@@ -16,11 +16,12 @@ Boolean isPR = "${env.CHANGE_URL}".contains('/pull/')
 String dockerImage = "evryace/helm-kubectl-terraform:2.14.1__1.13.5__0.12.2"
 
 ace(opts) {
-  String helmVer = "v2.14.1"
-  String helmImage = "lachlanevenson/k8s-helm:${helmVer}"
+  String helmImage = "lachlanevenson/k8s-helm:v2.14.1"
   String helmArgs = ["--entrypoint=''", "-e HELM_HOME=${env.WORKSPACE}"].join(" ")
 
   stage('init') {
-    sh "helm init --client-only"
+    docker.image(helmImage).inside(helmArgs) {
+      sh "helm init --client-only"
+    }
   }
 }
