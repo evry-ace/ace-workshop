@@ -6,10 +6,13 @@ eval (dm env)
 set base ace-workshop-2019
 set id foo
 
+set subId (az account show --query "id" --output tsv)
+set tenantId (az account show --query "tenantId" --output tsv)
 set rgName $base-$id
 set location northeurope
 set spName $rgName
-set saName $rgName-tf-state
+set saName (echo $rgName | sed 's/-//g')
+set scName terraform-state
 
 echo "Checking if resource group '$rgName' exists"
 set rgId (az group show --name $rgName --query "id" --output tsv | string trim)
@@ -59,5 +62,39 @@ end
 echo "Service principal: $spId"
 
 echo "--"
-echo "AppID: $spId"
-echo "AppSecret: $spPass"
+echo "Checking if Storage Account exists.."
+set saId (az storage account show --name $saName --output tsv --query id)
+if test $status = 0 && test "$saId" != ""
+  echo "Storage Account already exists!"
+else
+  echo "Creating Storage Account.."
+  set saId (az storage account create \
+    --name "$saName" \
+    --resource-group "$rgName" \
+    --location "$location" \
+    --tags "env=workshop" \
+    --output tsv \
+    --query id)
+
+  echo "Creating Storage Container.."
+  az storage container create --name "$scName" --account-name "$saName"
+end
+echo "Storage Account: $saId"
+
+echo "Getting Storage Account key.."
+set saKey (az storage account keys list \
+  --account-name "$saName" \
+  --resource-group "$rgName" \
+  --query "[?keyName == `key1`].{value:value}" \
+  --output tsv)
+echo "Storage Account key: $saKey"
+
+echo "--"
+echo "ARM_SUBSCRIPTION_ID=$subId"
+echo "ARM_TENANT_ID=$tenantId"
+echo "--"
+echo "ARM_CLIENT_ID=$spId"
+echo "ARM_CLIENT_SECRET=$spPass"
+echo "--"
+echo "AZURE_SA_ID=$saName"
+echo "AZURE_SA_KEY=$saKey"
