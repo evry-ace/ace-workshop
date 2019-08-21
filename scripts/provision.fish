@@ -15,8 +15,9 @@ set saName (echo $rgName | sed 's/-//g')
 set scName terraform-state
 
 echo "Checking if resource group '$rgName' exists"
-set rgId (az group show --name $rgName --query "id" --output tsv | string trim)
-if test !$status && test "$rgId" != ""
+set rgId (az group show --name $rgName --query "id" --output tsv)
+if test $status = 0 && test "$rgId" != ""
+  set rgId (echo $rgId | string trim)
   echo "Resource group already exists!"
 else
   echo "Creating resource group '$rgName'.."
@@ -35,8 +36,16 @@ echo "Checking if Service Principal '$spName' exists"
 set spId (az ad sp list \
   --display-name $spName \
   --query "[].appId" \
-  --output tsv || "")
-if test "$spId" = ""
+  --output tsv)
+if test $status = 0 && test "$spId" != ""
+  set spId (echo $spId | string trim)
+  echo "Service principal already exists"
+  echo "Lets set a new password for it.."
+  set spPass (az ad sp credential reset \
+    --name "$spName" \
+    --query "password" \
+    --output "tsv")
+else
   echo "Creating service principal $spName.."
 
   set sp (az ad sp create-for-rbac \
@@ -51,13 +60,6 @@ if test "$spId" = ""
 
   #echo "Remove contributor role"
   #az role assignment delete --assignee $spId --role Contributor
-else
-  echo "Service principal already exists"
-  echo "Lets set a new password for it.."
-  set spPass (az ad sp credential reset \
-    --name $spName \
-    --query password \
-    --output tsv)
 end
 echo "Service principal: $spId"
 
@@ -65,6 +67,7 @@ echo "--"
 echo "Checking if Storage Account exists.."
 set saId (az storage account show --name $saName --output tsv --query id)
 if test $status = 0 && test "$saId" != ""
+  set saId (echo $saId | string trim)
   echo "Storage Account already exists!"
 else
   echo "Creating Storage Account.."
@@ -92,9 +95,11 @@ echo "Storage Account key: $saKey"
 echo "--"
 echo "ARM_SUBSCRIPTION_ID=$subId"
 echo "ARM_TENANT_ID=$tenantId"
+echo "ARM_RESOURCE_GROUP=$rgName"
+echo "ARM_LOCATION=$location"
 echo "--"
 echo "ARM_CLIENT_ID=$spId"
 echo "ARM_CLIENT_SECRET=$spPass"
 echo "--"
-echo "AZURE_SA_ID=$saName"
-echo "AZURE_SA_KEY=$saKey"
+echo "STORAGE_ACCOUNT_NAME=$saName"
+echo "STORAGE_ACCESS_KEY=$saKey"
