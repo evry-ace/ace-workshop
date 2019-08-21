@@ -40,12 +40,10 @@ ace(opts) {
         [id: 'aks_rbac_client_app_id'],
         [id: 'aks_rbac_server_app_id'],
         [id: 'aks_rbac_server_app_secret'],
-        [id: 'storage_access_key'],
-        [id: 'storage_account_name'],
       ],
     ]
 
-    terraform(envName, tfOpts) {
+    terraform('default', tfOpts) {
       lint()
       plan()
     }
