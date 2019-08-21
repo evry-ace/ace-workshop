@@ -13,15 +13,44 @@ Map opts = [
 
 Boolean isMaster = "${env.BRANCH_NAME}" == 'master'
 Boolean isPR = "${env.CHANGE_URL}".contains('/pull/')
-String dockerImage = "evryace/helm-kubectl-terraform:2.14.1__1.13.5__0.12.2"
 
 ace(opts) {
   String helmImage = "lachlanevenson/k8s-helm:v2.14.1"
   String helmArgs = ["--entrypoint=''", "-e HELM_HOME=${env.WORKSPACE}"].join(" ")
 
-  stage('init') {
+  stage('helm init') {
     docker.image(helmImage).inside(helmArgs) {
       sh "helm init --client-only"
+    }
+  }
+
+  stage('terraform') {
+    String terraformImage = ""
+
+    Map tfOpts = [
+        dockerImage: 'evryace/helm-kubectl-terraform:2.14.1__1.13.5__0.12.2',
+        provider: 'azure',
+        path: 'terraform',
+        extraCreds: [
+          [id: 'azure_subscription_id'],
+          [id: 'azure_tenant_id'],
+          //[id: 'azure_resource_group'],
+          //[id: 'azure_location'],
+          [id: 'azure_client_id'],
+          [id: 'azure_client_secret'],
+          //[id: 'aks_ssh_public_key'],
+          [id: 'aks_rbac_client_app_id'],
+          [id: 'aks_rbac_server_app_id'],
+          [id: 'aks_rbac_server_app_secret'],
+          [id: 'storage_access_key'],
+          [id: 'storage_account_name'],
+        ],
+      ]
+
+      terraform(envName, tfOpts) {
+        lint()
+        plan()
+      }
     }
   }
 }
