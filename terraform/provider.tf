@@ -6,3 +6,10 @@ provider "azurerm" {
   version                    = "v1.32.1"
   skip_provider_registration = true
 }
+
+terraform {
+  backend "azurerm" {
+    container_name       = "terraform-state"
+    key                  = "terraform.tfstate"
+  }
+}
