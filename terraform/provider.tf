@@ -9,7 +9,7 @@ provider "azurerm" {
 
 provider "kubernetes" {
   version = "v1.8.1"
-  host = "${module.aks.kube_host}"
+  host    = "${module.aks.kube_host}"
 
   client_key             = "${base64decode(module.aks.kube_client_key)}"
   client_certificate     = "${base64decode(module.aks.kube_client_ca)}"
@@ -32,7 +32,7 @@ provider "helm" {
 
 terraform {
   backend "azurerm" {
-    container_name       = "terraform-state"
-    key                  = "terraform.tfstate"
+    container_name = "terraform-state"
+    key            = "terraform.tfstate"
   }
 }
