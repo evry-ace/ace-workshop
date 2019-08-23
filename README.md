@@ -2,13 +2,63 @@
 
 Template for ACE Workshop
 
-## Outline
+## Lab 1: Command Line
 
-1. Get familiar with GitHub Flow
-1. Set up Jenkinsfile using ace-jenkins-lib
-1. Set up AKS cluster with Terraform
-1. Set up Prometheus and Grafana using Prometheus Operator
-1. Build and deploy a simple application
-1. Set up simple ingress controller
-1. Set up cert-manager
-1. Set up Istio (bonus)
+Download and install the following tools:
+
+* [Git](https://git-scm.com/downloads) (GitBash if you are on Windows)
+
+Run the following command to verify that `git` is working:
+
+```
+git --version
+```
+
+Then [clone this repository](https://help.github.com/en/articles/cloning-a-repository).
+
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
+
+Run the following command to login in using you `@evry.com` account:
+
+```
+az login
+```
+
+* [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+Run the following command to verify that `kubectl` is working:
+
+```
+kubectl --version
+```
+
+* [Helm CLI](https://github.com/helm/helm/releases/tag/v2.14.3)
+* [Terraform CLI](https://www.terraform.io/downloads.html)
+
+## Lab 2: Git and GitHub
+
+`TBA`
+
+## Lab 3: Set up AKS cluster with Terraform
+
+`TBA`
+
+## Lab 4: Set up Ingress Controller
+
+`TBA`
+
+## Lab 5: Build and deploy a simple application
+
+`TBA`
+
+## Lab 6: Set up cert-manager
+
+`TBA`
+
+## Lab 7: Set up Prometheus and Grafana
+
+`TBA`
+
+## Lab 8: Set up Istio (bonus)
+
+`TBA`
