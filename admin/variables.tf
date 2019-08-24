@@ -5,16 +5,18 @@ variable "azure_tenant_id" {}
 variable "azure_subscription_id" {}
 variable "azure_resource_group" {}
 
+variable "prefix" {
+  default = "ace-workshop-2019"
+}
+
 variable "users" {
   type = list(object({
-    id    = string
-    name  = string
-    email = string
+    id  = string
+    oid = string
   }))
 
   default = [{
-    id    = "e213794"
-    name  = "Endre"
-    email = "endre.karlson@evry.com"
+    id  = "hans"
+    oid = "864c7087-d2a8-4ca8-84e0-f8c272d27311"
   }]
 }

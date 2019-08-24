@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "ws" {
   count = length(var.users)
 
-  name     = var.users[count.index].id
+  name     = "${var.prefix}-${var.users[count.index].id}"
   location = var.azure_location
 
   tags = {
@@ -37,10 +37,18 @@ resource "azurerm_dns_a_record" "ws" {
   records             = [azurerm_public_ip.ws[count.index].ip_address]
 }
 
+resource "random_string" "storage_id" {
+  count = length(var.users)
+
+  length  = 4
+  upper   = false
+  special = false
+}
+
 resource "azurerm_storage_account" "ws" {
   count = length(var.users)
 
-  name                     = "aceworkshop2019${var.users[count.index].id}"
+  name                     = "${replace(var.prefix, "-", "")}${var.users[count.index].id}${random_string.storage_id[count.index].result}"
   resource_group_name      = azurerm_resource_group.ws[count.index].name
   location                 = var.azure_location
   account_tier             = "Standard"
