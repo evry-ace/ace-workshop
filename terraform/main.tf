@@ -4,13 +4,13 @@ data "azurerm_resource_group" "ws" {
 
 module "acr" {
   source              = "github.com/evry-ace/tf-azure-acr"
-  registry_name       = "acews${var.ace_name}"
+  registry_name       = "aceworkshop2019${var.user_id}"
   resource_group_name = data.azurerm_resource_group.ws.name
   sku                 = "Standard"
 }
 
 resource "azurerm_log_analytics_workspace" "ws" {
-  name                = "la-ws-${var.ace_name}"
+  name                = "logs-ace"
   resource_group_name = data.azurerm_resource_group.ws.name
   location            = data.azurerm_resource_group.ws.location
   sku                 = "PerGB2018"
@@ -18,14 +18,14 @@ resource "azurerm_log_analytics_workspace" "ws" {
 
 module "aks" {
   source              = "github.com/evry-ace/tf-azure-aks"
-  cluster_name        = "aks-ws-${var.ace_name}"
+  cluster_name        = "aks-ace"
   resource_group_name = data.azurerm_resource_group.ws.name
 
   rbac_server_app_id     = var.aks_rbac_server_app_id
   rbac_server_app_secret = var.aks_rbac_server_app_secret
   rbac_client_app_id     = var.aks_rbac_client_app_id
 
-  dns_prefix = "ace-ws-${var.ace_name}"
+  dns_prefix = "ace"
 
   client_id      = var.azure_client_id
   client_secret  = var.azure_client_secret

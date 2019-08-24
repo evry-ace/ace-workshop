@@ -1,4 +1,4 @@
-variable "ace_name" {}
+variable "user_id" {}
 variable "azure_location" {}
 variable "azure_resource_group" {}
 variable "azure_client_id" {}
