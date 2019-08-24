@@ -9,4 +9,9 @@ resource "helm_release" "traefik" {
   repository = "${data.helm_repository.stable.metadata.0.name}"
   chart      = "traefik"
   version    = "1.76.1"
+
+  set {
+    name  = "loadBalancerIP"
+    value = var.aks_ingress_ip
+  }
 }
