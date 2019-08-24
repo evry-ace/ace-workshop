@@ -16,6 +16,7 @@ data "template_file" "ws" {
     ws_public_ip_ip       = azurerm_public_ip.ws[count.index].ip_address
     ws_public_dns_name    = replace(azurerm_dns_a_record.ws[count.index].name, "*.", "")
     ws_public_dns_zone    = azurerm_dns_a_record.ws[count.index].zone_name
+    ws_user_id            = var.users[count.index].id
   }
 }
 

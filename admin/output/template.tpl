@@ -14,3 +14,5 @@ TF_VAR_storage_access_key=${ws_access_key}
 TF_VAR_aks_ingress_ip_name=${ws_public_ip_name}
 TF_VAR_aks_ingress_ip=${ws_public_ip_ip}
 TF_VAR_aks_ingress_dns_name=${ws_public_dns_name}.${ws_public_dns_zone}
+
+TF_VAR_user_id=${ws_user_id}
