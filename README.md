@@ -57,7 +57,15 @@ kubectl --version
 
 ## Lab 7: Set up Prometheus and Grafana
 
-`TBA`
+### Install OLM (Operator Lifecycle Manager)
+
+Meet https://operatorhub.io/
+
+kubectl apply -f https://github.com/operator-framework/operator-lifecycle-manager/releases/download/0.11.0/crds.yaml
+kubectl apply -f https://github.com/operator-framework/operator-lifecycle-manager/releases/download/0.11.0/olm.yaml
+
+kubectl apply -f manifests/prometheus-operator.yaml
+kubectl apply -f manifests/prometheus-cr.yaml
 
 ## Lab 8: Set up Istio (bonus)
 
