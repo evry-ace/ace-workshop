@@ -1,0 +1,36 @@
+---
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: grafana
+  namespace: grafana
+spec:
+  config:
+    log:
+      mode: "console"
+      level: "warn"
+    security:
+      admin_user: "root"
+      admin_password: "secret"
+  dashboardLabelSelector:
+    - matchExpressions:
+        - {key: app, operator: In, values: [grafana]}
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: prometheus
+  namespace: grafana
+spec:
+  name: middleware.yaml
+  datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus-operated.monitoring.svc.cluster.local:9090/
+      isDefault: true
+      version: 1
+      editable: false
+      jsonData:
+        timeInterval: "5s"
+---

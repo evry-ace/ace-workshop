@@ -67,6 +67,10 @@ kubectl apply -f https://github.com/operator-framework/operator-lifecycle-manage
 kubectl apply -f manifests/prometheus-operator.yaml
 kubectl apply -f manifests/prometheus-cr.yaml
 
+kubectl apply -f manifests/grafana-operator.yaml
+kubectl apply -f manifests/grafana-cr.yaml
+kubectl apply -f manifests/grafana-default-dashboards.yaml
+
 ## Lab 8: Set up Istio (bonus)
 
 `TBA`
