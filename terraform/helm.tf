@@ -3,6 +3,10 @@ resource "kubernetes_service_account" "tiller_sa" {
     name      = "tiller"
     namespace = "kube-system"
   }
+
+  lifecycle {
+    ignore_changes = [secret]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_sa" {
