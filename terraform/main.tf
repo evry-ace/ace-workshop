@@ -38,3 +38,21 @@ module "aks" {
 
   k8s_version = "1.14.6"
 }
+
+resource "kubernetes_cluster_role_binding" "ace_admins" {
+  metadata {
+    name = "ace-cluster-admins"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Group"
+    name      = var.aks_rbac_cluster_admins_group_id
+  }
+}
