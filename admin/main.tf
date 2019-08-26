@@ -75,7 +75,7 @@ resource "azurerm_management_lock" "storage-account" {
 
   name       = "resource-sa-${var.users[count.index].id}"
   scope      = "${azurerm_storage_account.ws[count.index].id}"
-  lock_level = "ReadOnly"
+  lock_level = "CanNotDelete"
   notes      = "Locked because it's needed by the workshop"
 }
 
