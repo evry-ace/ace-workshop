@@ -20,6 +20,8 @@ loadBalancerIP: ${var.aks_ingress_ip}
 service:
   annotations:
     service.beta.kubernetes.io/azure-load-balancer-resource-group: ${data.azurerm_resource_group.ws.name}
+dashboard:
+  enabled: true
+  domain: traefik.${var.aks_ingress_dns_name}
 EOF
-]
 }
