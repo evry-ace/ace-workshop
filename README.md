@@ -190,9 +190,9 @@ Once all of this is set up you can initiate Terraform using the following
 command:
 
 ```bash
-terraform init --reconfigure \
+terraform init -reconfigure \
   -backend-config="access_key=$TF_VAR_storage_access_key" \
-  -backend-config="storage_account_name=$TF_VAR_storage_account_name" \
+  -backend-config="storage_account_name=$TF_VAR_storage_account_name"
 ```
 
 **NB!** If this command fails, be sure you have run `source .env`
