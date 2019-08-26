@@ -48,7 +48,7 @@ resource "random_string" "storage_id" {
 resource "azurerm_storage_account" "ws" {
   count = length(var.users)
 
-  name                     = "${replace(var.prefix, "-", "")}${var.users[count.index].id}${random_string.storage_id[count.index].result}"
+  name                     = substr("${replace(var.prefix, "-", "")}${var.users[count.index].id}${random_string.storage_id[count.index].result}", 0, 24)
   resource_group_name      = azurerm_resource_group.ws[count.index].name
   location                 = var.azure_location
   account_tier             = "Standard"
