@@ -27,6 +27,15 @@ resource "azurerm_public_ip" "ws" {
   }
 }
 
+resource "azurerm_management_lock" "public-ip" {
+  count = length(var.users)
+
+  name       = "resource-ip-${var.users[count.index].id}"
+  scope      = "${azurerm_public_ip.ws[count.index].id}"
+  lock_level = "ReadOnly"
+  notes      = "Locked because it's needed by the workshop"
+}
+
 resource "azurerm_dns_a_record" "ws" {
   count = length(var.users)
 
@@ -59,6 +68,15 @@ resource "azurerm_storage_account" "ws" {
     workshop    = "ace"
     owner       = var.users[count.index].id
   }
+}
+
+resource "azurerm_management_lock" "storage-account" {
+  count = length(var.users)
+
+  name       = "resource-sa-${var.users[count.index].id}"
+  scope      = "${azurerm_storage_account.ws[count.index].id}"
+  lock_level = "ReadOnly"
+  notes      = "Locked because it's needed by the workshop"
 }
 
 resource "azurerm_storage_container" "ws" {

@@ -3,12 +3,12 @@ data "template_file" "ws" {
 
   template = "${file("${path.module}/output/template.tpl")}"
   vars = {
-    azure_subscription_id      = var.azure_subscription_id
-    azure_tenant_id            = var.azure_tenant_id
-    ws_resource_group          = azurerm_resource_group.ws[count.index].name
-    azure_location             = var.azure_location
-    ws_sp_client_id            = var.azure_client_id
-    ws_sp_client_secret        = var.azure_client_secret
+    azure_subscription_id = var.azure_subscription_id
+    azure_tenant_id       = var.azure_tenant_id
+    ws_resource_group     = azurerm_resource_group.ws[count.index].name
+    azure_location        = var.azure_location
+    ws_sp_client_id       = var.azure_client_id
+    ws_sp_client_secret   = var.azure_client_secret
     #ws_sp_client_id            = azuread_application.ws[count.index].application_id
     #ws_sp_client_secret        = azuread_service_principal_password.ws[count.index].value
     ws_storage_account         = azurerm_storage_account.ws[count.index].name
