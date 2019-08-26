@@ -14,11 +14,8 @@ resource "azuread_service_principal" "ws" {
 }
 
 # Generate random string to be used for Service Principal password
-resource "random_string" "password" {
+resource "random_uuid" "password" {
   count = length(var.users)
-
-  length  = 32
-  special = true
 }
 
 # Create Service Principal password
@@ -26,7 +23,7 @@ resource "azuread_service_principal_password" "ws" {
   count = length(var.users)
 
   service_principal_id = azuread_service_principal.ws[count.index].id
-  value                = random_string.password[count.index].result
+  value                = random_uuid.password[count.index].result
   end_date             = "2020-01-01T01:00:00Z"
 }
 
