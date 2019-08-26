@@ -17,3 +17,7 @@ resource "azurerm_dns_zone" "master" {
     workshop    = "ace"
   }
 }
+
+output "dns_name_servers" {
+  value = azurerm_dns_zone.master.name_servers
+}
