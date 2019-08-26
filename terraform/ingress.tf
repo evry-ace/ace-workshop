@@ -24,4 +24,5 @@ dashboard:
   enabled: true
   domain: traefik.${var.aks_ingress_dns_name}
 EOF
+  ]
 }
