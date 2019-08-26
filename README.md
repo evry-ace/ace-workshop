@@ -190,9 +190,9 @@ Once all of this is set up you can initiate Terraform using the following
 command:
 
 ```bash
-terraformorm init \
-  -backend-config="access_key=$TF_VAR_storage_account_name" \
-  -backend-config="storage_account_name=$TF_VAR_storage_access_key" \
+terraform init \
+  -backend-config="access_key=$TF_VAR_storage_access_key" \
+  -backend-config="storage_account_name=$TF_VAR_storage_account_name" \
 ```
 
 As you can see this corresponds to the variables we have set up on our
