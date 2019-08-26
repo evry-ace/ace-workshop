@@ -19,4 +19,7 @@ export TF_VAR_aks_rbac_server_app_id=${aks_rbac_server_app_id}
 export TF_VAR_aks_rbac_server_app_secret=${aks_rbac_server_app_secret}
 export TF_VAR_aks_rbac_client_app_id=${aks_rbac_client_app_id}
 
+export TF_VAR_aks_rbac_cluster_admins_group_id=${aks_rbac_cluster_admins_group_id}
+export TF_VAR_aks_rbac_cluster_users_group_id=${aks_rbac_cluster_users_group_id}
+
 export TF_VAR_user_id=${ws_user_id}
