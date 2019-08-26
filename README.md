@@ -35,24 +35,49 @@ kubectl --version
 * [Helm CLI](https://github.com/helm/helm/releases/tag/v2.14.3)
 * [Terraform CLI](https://www.terraform.io/downloads.html)
 
+**NB!** Make sure you have at least version `v0.12.6` installed.
+
+```
+terraform --version
+```
+
 ## Lab 2: Git and GitHub
 
 `TBA`
 
-Terraform syntax highlighter for your favorite editor!
+* Create a new git repository (`git init`)
+* Add the following to your `.gitignore` file:
+
+```
+.env
+.terraform
+*.tfstate*
+```
+
+* Commit your `.gitignore` file (`git add .gitignore; git commit`)
+* Add your assigned remote (`git remote add origin master git@github.com...`)
+* Push your branch to the remote (`git push -u origin master`)
+
+**Pro tip!** Add the terraform syntax highlighter for your favorite editor!
 
 ## Lab 3: Set up AKS cluster with Terraform
 
+**NB!** In order to complete this lab you will need a `.env` file with your
+assigned Azure credentials! If you have not yet got it, please ask your
+instructor.
+
 In order to get started with Terraform we need the following parts:
 
-* One ore more [Terraform providers][tf-providers]. For this workshop we will be
+* One or more [Terraform providers][tf-providers]. For this workshop we will be
   using the [`azurerm`][tf-azurerm] provider.
 * A [remote state backend][tf-backends] for storing the Terraform state.
+* [Resources][tf-resources] (the items) that Terraform should set up.
 
 [tf-providers]: https://terraform.io/docs/providers
 [tf-backends]: https://www.terraform.io/docs/backends/index.html
 [tf-azurerm]: https://www.terraform.io/docs/providers/azurerm/
 [tf-azurerm-backend]: https://www.terraform.io/docs/backends/types/azurerm.html<Paste>
+[tf-resources]: https://www.terraform.io/docs/configuration/resources.html
 
 ### Directory structure
 
@@ -69,7 +94,7 @@ with content as we go.
 * `provider.tf`
 * `main.tf`
 
-#### variables.tf
+### variables.tf
 
 This file will hold our [Terraform variables][tf-variables]. As the name
 suggests these can be re-used accross the Terraform setup and they can have
@@ -104,6 +129,18 @@ types][tf-datatypes].
 
 [tf-variables]: https://www.terraform.io/docs/configuration/variables.html
 [tf-datatypes]: https://www.terraform.io/docs/configuration/types.html
+
+### provider.tf
+
+As mentioned we will be using the [`azurerm`][tf-azurerm] Terrafrom provider for
+this workshop. The provider configuration connects to the infrastructure and
+makes it possible for Terraform to set up, modify and delete resources on your
+behalf.
+
+The provider defintion looks like this:
+
+```
+
 
 ## Lab 4: Set up Ingress Controller
 
