@@ -43,9 +43,7 @@ terraform --version
 
 ## Lab 2: Git and GitHub
 
-`TBA`
-
-* Create a new git repository (`git init`)
+* Create a new local git repository on your machine (`git init`)
 * Add the following to your `.gitignore` file:
 
 ```
@@ -57,6 +55,13 @@ terraform --version
 * Commit your `.gitignore` file (`git add .gitignore; git commit`)
 * Add your assigned remote (`git remote add origin master git@github.com...`)
 * Push your branch to the remote (`git push -u origin master`)
+
+Move the `.conf` file you have recieved to the git repository and rename it to
+`.env`. You can source the file by running the following command:
+
+```
+source .env
+```
 
 **Pro tip!** Add the terraform syntax highlighter for your favorite editor!
 
