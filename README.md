@@ -29,7 +29,7 @@ az login
 Run the following command to verify that `kubectl` is working:
 
 ```
-kubectl --version
+kubectl version
 ```
 
 * [Helm CLI](https://github.com/helm/helm/releases/tag/v2.14.3)
