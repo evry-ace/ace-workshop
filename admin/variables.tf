@@ -63,5 +63,11 @@ variable "users" {
   }, {
     id  = "shamrez"
     oid = "a95c02db-2eb8-43a9-939e-7d2d5a5824ed"
+  }, {
+    id  = "yen"
+    oid = "7801a3f5-5db4-41f1-8e3a-4ec61365338e"
+  }, {
+    id  = "endre"
+    oid = "88ebf85c-befc-47cf-acbb-b0062c5b039e"
   }]
 }
