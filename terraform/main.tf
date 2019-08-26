@@ -3,10 +3,11 @@ data "azurerm_resource_group" "ws" {
 }
 
 module "acr" {
-  source              = "github.com/evry-ace/tf-azure-acr"
-  registry_name       = "aceworkshop2019${var.user_id}"
-  resource_group_name = data.azurerm_resource_group.ws.name
-  sku                 = "Standard"
+  source                  = "github.com/evry-ace/tf-azure-acr"
+  registry_name           = "aceworkshop2019${var.user_id}"
+  resource_group_name     = data.azurerm_resource_group.ws.name
+  resource_group_location = data.azurerm_resource_group.ws.location
+  sku                     = "Standard"
 }
 
 resource "azurerm_log_analytics_workspace" "ws" {
@@ -17,9 +18,10 @@ resource "azurerm_log_analytics_workspace" "ws" {
 }
 
 module "aks" {
-  source              = "github.com/evry-ace/tf-azure-aks"
-  cluster_name        = "aks-ace"
-  resource_group_name = data.azurerm_resource_group.ws.name
+  source                  = "github.com/evry-ace/tf-azure-aks"
+  cluster_name            = "aks-ace"
+  resource_group_name     = data.azurerm_resource_group.ws.name
+  resource_group_location = data.azurerm_resource_group.ws.location
 
   rbac_server_app_id     = var.aks_rbac_server_app_id
   rbac_server_app_secret = var.aks_rbac_server_app_secret
