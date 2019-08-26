@@ -27,7 +27,7 @@ resource "azuread_service_principal_password" "ws" {
 
   service_principal_id = azuread_service_principal.ws[count.index].id
   value                = random_string.password[count.index].result
-  end_date_relative    = "17520h"
+  end_date             = "2020-01-01T01:00:00Z"
 }
 
 data "azurerm_subscription" "primary" {}
