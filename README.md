@@ -188,9 +188,14 @@ data "azurerm_resource_group" "ws" {
 ```
 
 This won't actually create something, this is a [Terraform data
-source][tf-datasources] which is a reference to an existing resource. `data`
+source][tf-datasources] definition which is a reference to an existing resource.
 
 [tf-datasources]: https://www.terraform.io/docs/configuration/data-sources.html
+
+### Verify and Apply
+
+Once you have this working you can verify your setup
+
 
 ## Lab 4: Set up Ingress Controller
 
