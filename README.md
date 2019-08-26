@@ -168,6 +168,11 @@ provider "azurerm" {
 }
 ```
 
+Configure the terraform backend (Used by terraform to store it's state of the world.)
+```hcl
+terraformorm init -backend-config="access_key=$TF_VAR_storage_account_name"   -backend-config="storage_account_name=$TF_VAR_storage_access_key"
+```
+
 As you can see this corresponds to the variables we have set up on our
 `variables.tf` file.
 
