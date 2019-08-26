@@ -130,6 +130,24 @@ types][tf-datatypes].
 [tf-variables]: https://www.terraform.io/docs/configuration/variables.html
 [tf-datatypes]: https://www.terraform.io/docs/configuration/types.html
 
+Go ahead and add the following variables to your `variables.tf` file now:
+
+```hcl
+variable "user_id" {}
+variable "azure_location" {}
+variable "azure_resource_group" {}
+variable "azure_client_id" {}
+variable "azure_client_secret" {}
+variable "azure_tenant_id" {}
+variable "azure_subscription_id" {}
+```
+
+As you can see they have no default value. That is becuase we never want to hard
+code credentials or other sensitive information inside our configuration, these
+should be kept secret and injected using [environment variables][tf-envvars].
+
+[tf-envvars]: https://www.terraform.io/docs/configuration/variables.html#environment-variables
+
 ### provider.tf
 
 As mentioned we will be using the [`azurerm`][tf-azurerm] Terrafrom provider for
@@ -139,8 +157,35 @@ behalf.
 
 The provider defintion looks like this:
 
+```hcl
+provider "azurerm" {
+  subscription_id            = "${var.azure_subscription_id}"
+  client_id                  = "${var.azure_client_id}"
+  client_secret              = "${var.azure_client_secret}"
+  tenant_id                  = "${var.azure_tenant_id}"
+  version                    = "v1.33.0"
+  skip_provider_registration = true
+}
 ```
 
+As you can see this corresponds to the variables we have set up on our
+`variables.tf` file.
+
+### main.tf
+
+Now let's add something to our `main.tf` file so we can verify that our setup is
+working.
+
+```hcl
+data "azurerm_resource_group" "ws" {
+  name = var.azure_resource_group
+}
+```
+
+This won't actually create something, this is a [Terraform data
+source][tf-datasources] which is a reference to an existing resource. `data`
+
+[tf-datasources]: https://www.terraform.io/docs/configuration/data-sources.html
 
 ## Lab 4: Set up Ingress Controller
 
