@@ -168,9 +168,26 @@ provider "azurerm" {
 }
 ```
 
-Configure the terraform backend (Used by terraform to store it's state of the world.)
-```hcl
-terraformorm init -backend-config="access_key=$TF_VAR_storage_account_name"   -backend-config="storage_account_name=$TF_VAR_storage_access_key"
+In order for Terraform to remember what had already been set up you need to set
+up the remote state backend. This is using a storage account on Azure and it is
+defined like this in the `provider.tf` file:
+
+```
+terraform {
+  backend "azurerm" {
+    container_name = "terraform-state"
+    key            = "terraform.tfstate"
+  }
+}
+```
+
+Once all of this is set up you can initiate Terraform using the following
+command:
+
+```bash
+terraformorm init \
+  -backend-config="access_key=$TF_VAR_storage_account_name" \
+  -backend-config="storage_account_name=$TF_VAR_storage_access_key" \
 ```
 
 As you can see this corresponds to the variables we have set up on our
