@@ -7,8 +7,10 @@ data "template_file" "ws" {
     azure_tenant_id            = var.azure_tenant_id
     ws_resource_group          = azurerm_resource_group.ws[count.index].name
     azure_location             = var.azure_location
-    ws_sp_client_id            = azuread_application.ws[count.index].application_id
-    ws_sp_client_secret        = azuread_service_principal_password.ws[count.index].value
+    ws_sp_client_id            = var.azure_client_id
+    ws_sp_client_secret        = var.azure_client_secret
+    #ws_sp_client_id            = azuread_application.ws[count.index].application_id
+    #ws_sp_client_secret        = azuread_service_principal_password.ws[count.index].value
     ws_storage_account         = azurerm_storage_account.ws[count.index].name
     ws_storage_container       = azurerm_storage_container.ws[count.index].name
     ws_access_key              = azurerm_storage_account.ws[count.index].primary_access_key
