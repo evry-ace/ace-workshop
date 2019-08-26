@@ -1,6 +1,11 @@
 # ACE Workshop 2019
 
-Template for ACE Workshop
+> ACE the hard way!
+
+* [Lab 1: Command Line](#lab-1-command-line)
+* [Lab 2: Git and GitHub](#lab-2-git-and-github)
+* [Lab 3: Setting up Terraform](#lab-3-setting-up-terraform)
+* [Lab 4: Setting up AKS](#lab-4-setting-up-aks)
 
 ## Lab 1: Command Line
 
@@ -13,8 +18,6 @@ Run the following command to verify that `git` is working:
 ```
 git --version
 ```
-
-Then [clone this repository](https://help.github.com/en/articles/cloning-a-repository).
 
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
 
@@ -35,7 +38,7 @@ kubectl version
 * [Helm CLI](https://github.com/helm/helm/releases/tag/v2.14.3)
 * [Terraform CLI](https://www.terraform.io/downloads.html)
 
-**NB!** Make sure you have at least version `v0.12.6` installed.
+> **NB!** Make sure you have at least version `v0.12.6` installed.
 
 ```
 terraform --version
@@ -65,7 +68,7 @@ source .env
 
 **Pro tip!** Add the terraform syntax highlighter for your favorite editor!
 
-## Lab 3: Set up AKS cluster with Terraform
+## Lab 3: Setting up Terraform
 
 **NB!** In order to complete this lab you will need a `.env` file with your
 assigned Azure credentials! If you have not yet got it, please ask your
@@ -108,9 +111,9 @@ different values for different environments.
 All variables needs to be declared and we recommend that you put them in this
 file in order to keep track of them an better re-usability.
 
-*NB!* Terraform favours underscore `_` when seperating words in variables like
-this: `my_awesome_variable`. Try to adheare to this to make the code more
-uniform.
+> *NB!* Terraform favours underscore `_` when seperating words in variables like
+> this: `my_awesome_variable`. Try to adheare to this to make the code more
+> uniform.
 
 Variables are declared like this:
 
@@ -195,7 +198,7 @@ terraform init -reconfigure \
   -backend-config="storage_account_name=$TF_VAR_storage_account_name"
 ```
 
-**NB!** If this command fails, be sure you have run `source .env`
+> **NB!** If this command fails, be sure you have run `source .env`
 
 As you can see this corresponds to the variables we have set up on our
 `variables.tf` file.
@@ -218,8 +221,29 @@ source][tf-datasources] definition which is a reference to an existing resource.
 
 ### Verify and Apply
 
-Once you have this working you can verify your setup
+Once you have this working you can verify your setup by running the following
+commands:
 
+```
+terraform fmt
+terraform verify
+```
+
+In order to actually run this and see what it does you can run the following
+commands:
+
+```
+terraform plan
+terraform apply
+```
+
+This should give an output like this:
+
+```
+...
+```
+
+## Lab 4: Setting up AKS
 
 ## Lab 4: Set up Ingress Controller
 
