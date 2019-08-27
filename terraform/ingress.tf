@@ -20,6 +20,8 @@ dashboard:
   domain: traefik.${var.aks_ingress_dns_name}
 
 metrics:
+  prometheus:
+    enabled: true
   serviceMonitor:
     enabled: true
 
