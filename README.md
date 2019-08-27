@@ -321,6 +321,22 @@ prefix like `guestbook.` to your `$TF_VAR_aks_ingress_dns_name` variable.
 
 ### Helm Packaging
 
+Now we can create a Helm Chart for our guestbook application in order to get it
+deployed via our Terraform setup.
+
+* https://helm.sh/docs/developing_charts/#charts
+
+Run the following command to create a new Helm Chart from the root of your git
+repository:
+
+```
+helm create guestbook-chart
+```
+
+This creates a new directory explore what is in it before moving on. You now
+need to take the Kubernetes configuration files and add them to the
+`./templates` directory.
+
 ## Lab 7: Automaion with Jenkins
 
 
