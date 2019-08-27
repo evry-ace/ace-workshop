@@ -37,7 +37,6 @@ grafana:
   ingress:
     enabled: true
 
-    path: "/*"
     hosts:
     - grafana.${var.aks_ingress_dns_name}
 
