@@ -15,6 +15,11 @@ prometheusOperator:
 commonLabels:
   prometheus: default
 prometheus:
+  ingress:
+    enabled: true
+    hosts:
+    - promethues.${var.aks_ingress_dns_name}
+
   prometheusSpec:
     externalUrl: http://promethues.${var.aks_ingress_dns_name}
     serviceMonitorSelector:
