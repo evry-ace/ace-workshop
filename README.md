@@ -25,6 +25,7 @@ Run the following command to login in using you `@evry.com` account:
 
 ```
 az login
+az account set -s f18e2af9-2f65-4e18-bc39-54d74e271e7c
 ```
 
 * [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
