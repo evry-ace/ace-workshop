@@ -26,7 +26,7 @@ ace(opts) {
 
   stage('terraform') {
     Map tfOpts = [
-      dockerImage: 'evryace/helm-kubectl-terraform:2.14.1__1.13.5__0.12.2',
+      dockerImage: 'evryace/helm-kubectl-terraform:2.14.1__1.13.7__0.12.6',
       provider: 'azure',
       path: 'terraform',
       extraCreds: [
