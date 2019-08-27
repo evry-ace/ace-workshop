@@ -11,7 +11,7 @@ global:
     enabled: true
 prometheusOperator:
   cleanupCustomResourceBeforeInstall: false
-  createCustomResource: false
+  createCustomResource: true
 commonLabels:
   prometheus: default
 prometheus:
