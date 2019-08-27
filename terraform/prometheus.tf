@@ -27,7 +27,7 @@ grafana:
     create: true
 
   adminUser: admin
-  adminPassword: admin
+  adminPassword: LHsboVgpOUmIfp8xk5d02L8vIxfnRMgRqeyeeaR5gRE=
 
   ingress:
     enabled: true
