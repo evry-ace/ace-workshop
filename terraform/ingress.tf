@@ -19,6 +19,10 @@ dashboard:
   enabled: true
   domain: traefik.${var.aks_ingress_dns_name}
 
+metrics:
+  serviceMonitor:
+    enabled: true
+
 rbac:
   enabled: true
 EOF
