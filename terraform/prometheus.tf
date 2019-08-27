@@ -21,7 +21,7 @@ prometheus:
     - promethues.${var.aks_ingress_dns_name}
 
   prometheusSpec:
-    externalUrl: http://promethues.${var.aks_ingress_dns_name}
+    externalUrl: http://prometheus.${var.aks_ingress_dns_name}
     serviceMonitorSelector:
       matchExpressions:
         - {key: prometheus, operator: In, values: [default]}
