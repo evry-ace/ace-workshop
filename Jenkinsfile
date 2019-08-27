@@ -32,14 +32,18 @@ ace(opts) {
       extraCreds: [
         [id: 'azure_subscription_id'],
         [id: 'azure_tenant_id'],
-        //[id: 'azure_resource_group'],
-        //[id: 'azure_location'],
+        [id: 'azure_resource_group'],
+        [id: 'azure_location'],
         [id: 'azure_client_id'],
         [id: 'azure_client_secret'],
         //[id: 'aks_ssh_public_key'],
+        [id: 'aks_ingress_ip'],
+        [id: 'aks_ingress_dns_name'],
         [id: 'aks_rbac_client_app_id'],
         [id: 'aks_rbac_server_app_id'],
         [id: 'aks_rbac_server_app_secret'],
+        [id: 'aks_rbac_cluster_admins_group_id'],
+        [id: 'user_id'],
       ],
     ]
 
