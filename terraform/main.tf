@@ -11,7 +11,7 @@ module "acr" {
 }
 
 resource "azurerm_log_analytics_workspace" "ws" {
-  name                = "logs-ace"
+  name                = "logs-ace-${var.user_id}"
   resource_group_name = data.azurerm_resource_group.ws.name
   location            = data.azurerm_resource_group.ws.location
   sku                 = "PerGB2018"
