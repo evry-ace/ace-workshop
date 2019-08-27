@@ -245,9 +245,84 @@ This should give an output like this:
 
 ## Lab 4: Setting up AKS
 
-## Lab 4: Set up Ingress Controller
+See `main.tf` for how to set up AKS and ACR.
 
-`TBA`
+In order to get the credentials run the following command:
+
+```
+az aks get-credentials \
+	--resource-group $TF_VAR_azure_resource_group \
+	--name aks-ace \
+	--file - > ~/.kube/config
+```
+
+If you get any problems try the following:
+
+* Make sure you have sourced your `.env` file (`source .env`)
+
+Now you can list all the [pods in your cluster][k8s-pods] by running the
+following command:
+
+```
+kubectl get pods --all-namespaces
+```
+
+[k8s-pods]: https://kubernetes.io/docs/concepts/workloads/pods/pod/
+
+## Lab 5: Set up Ingress Controller
+
+* https://helm.sh/
+* https://traefik.io/
+* https://hub.kubeapps.com/charts/stable/traefik
+
+```
+resource "helm_release" "traefik" {
+  name       = "traefik"
+  namespace  = "kube-system"
+  repository = "${data.helm_repository.stable.metadata.0.name}"
+  chart      = "traefik"
+  version    = "1.76.1"
+
+  values = [<<EOF
+  ...
+EOF
+  ]
+}
+```
+
+While this is deploying run the following commands in order to follow the
+progress:
+
+```
+kubectl get pods --all-namespaces --watch
+```
+
+## Lab 6: Deploy a simple application
+
+This lab your will learn to build and deploy a simple, multi-tier web
+application using Kubernetes and Docker. This example consists of the following
+components:
+
+* A single-instance Redis master to store guestbook entries
+* Multiple replicated Redis instances to serve reads
+* Multiple web frontend instances
+
+* https://kubernetes.io/docs/tutorials/stateless-application/guestbook/
+
+### Ingress Configuration
+
+Now, create an ingress configrutaion for your guest book such that you can visit
+it over the DNS and Ingress Controller that we have set up in previous labs.
+
+* https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+The DNS name for the ingress configuration is found in your `.env` file. Add a
+prefix like `guestbook.` to your `$TF_VAR_aks_ingress_dns_name` variable.
+
+### Helm Packaging
+
+## Lab 7: Automaion with Jenkins
+
 
 ## Lab 5: Build and deploy a simple application
 
