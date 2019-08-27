@@ -338,6 +338,15 @@ This creates a new directory explore what is in it before moving on. You now
 need to take the Kubernetes configuration files and add them to the
 `./templates` directory.
 
+Run the following command to install the new Helm Chart:
+
+```
+helm install \
+  --set ingress.hostName=guestbook.<YOU ID HERE>.workshop-2019.ace.evry.services \
+  --name guestbook \
+  ./guestbook-chart
+```
+
 ## Lab 7: Automaion with Jenkins
 
 
