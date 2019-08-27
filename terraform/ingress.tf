@@ -10,11 +10,6 @@ resource "helm_release" "traefik" {
   chart      = "traefik"
   version    = "1.76.1"
 
-  set {
-    name  = "loadBalancerIP"
-    value = var.aks_ingress_ip
-  }
-
   values = [<<EOF
 loadBalancerIP: ${var.aks_ingress_ip}
 service:
