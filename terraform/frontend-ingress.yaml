@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: frontend
+spec:
+  rules:
+  - host: guestbook.hans.workshop-2019.ace.evry.services
+    http:
+      paths:
+      - backend:
+          serviceName: frontend
+          servicePort: 80
