@@ -73,14 +73,21 @@ source .env
 
 We need to create following sets of variable in Azure in order to use them in Terraform. 
 
- 
+``` 
 aks_rbac_server_app_id
+
 aks_rbac_server_app_secret
+
 aks_rbac_client_app_id
+
 aks_rbac_cluster_admins_group_id
+
 aks_rbac_cluster_users_group_id
+
 azure_client_id
+
 azure_client_secret
+```
 
 Use Azure Cli to follow the below steps by logging in to your Azure tenant: 
 
