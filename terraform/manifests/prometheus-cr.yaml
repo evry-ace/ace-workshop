@@ -21,7 +21,7 @@ spec:
 
   baseImage: quay.io/prometheus/prometheus
   enableAdminAPI: false
-  externalUrl: https://prometheus.test.front.bkk.no
+  externalUrl: https://prometheus.example.com
   listenLocal: false
   logFormat: logfmt
   logLevel: info
