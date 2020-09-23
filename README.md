@@ -69,7 +69,187 @@ source .env
 
 **Pro tip!** Add the terraform syntax highlighter for your favorite editor!
 
-## Lab 3: Setting up Terraform
+## Lab 3 Setting up Azure (Pre-requisite for Terraform variables)
+
+We need to create following sets of variable in Azure in order to use them in Terraform. 
+
+``` 
+aks_rbac_server_app_id
+
+aks_rbac_server_app_secret
+
+aks_rbac_client_app_id
+
+aks_rbac_cluster_admins_group_id
+
+aks_rbac_cluster_users_group_id
+
+azure_client_id
+
+azure_client_secret
+```
+
+Use Azure Cli to follow the below steps by logging in to your Azure tenant: 
+
+Set the following variables by running the below commands in azure cli (bash)
+
+Replace these values with the actual values you want to use.
+
+```
+subscriptionId="f18e2af9-2f65-4e18-bc39-54d74e271e7c"
+aksname="myAKSCluster"
+aksadmingroup="my-aks-admin-group"
+aksusergroup="my-aks-user-group"
+spname="myAKSClusterServicePrincipal"
+```
+Login to Azure and choose the subscription where you want to create AKS cluster.
+
+```
+az login
+az account set -s $subscriptionId
+```
+
+###  3.1 Use Azure Active Directory for Kubernetes Cluster RBAC
+
+We will use Azure Active Directory (AAD) Server App component and AAD Client App componenet for this purpose. 
+
+### 3.1.1 Create AAD Server App Component
+
+ Run below commands in Azure Cli to create AAD Server App component
+```
+aks_rbac_server_app_id=$(az ad app create  --display-name "${aksname}Server"   --identifier-uris "https://${aksname}Server"  --query appId -o tsv) 
+```
+
+### Update the application group membership claims
+```
+az ad app update --id $aks_rbac_server_app_id --set groupMembershipClaims=All
+```
+
+### Create a service principal for the Azure AD for Server App
+```
+az ad sp create --id $aks_rbac_server_app_id
+```
+### Get the service principal secret for Server App
+```
+aks_rbac_server_app_secret=$(az ad sp credential reset  --name $aks_rbac_server_app_id  --credential-description "serversecret"  --query password -o tsv)
+```
+### Assign permissions for Server App
+```
+az ad app permission add  --id $aks_rbac_server_app_id  --api 00000003-0000-0000-c000-000000000000  --api-permissions e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope 06da0dbc-49e2-44d2-8312-53f166ab848a=Scope 7ab1d382-f21e-4acd-a863-ba3e13f7da61=Role
+```
+
+### Grant permissions for Server App
+
+```
+az ad app permission grant --id $aks_rbac_server_app_id --api 00000003-0000-0000-c000-000000000000
+
+az ad app permission admin-consent --id $aks_rbac_server_app_id
+```
+### 3.1.2 Create AAD Client App Component
+
+### Create AAD Client App
+```
+aks_rbac_client_app_id=$(az ad app create  --display-name "${aksname}Client"  --native-app  --reply-urls "https://${aksname}Client"  --query appId -o tsv)
+```
+
+### Create Service Principal for Client App
+```
+az ad sp create --id $aks_rbac_client_app_id
+```
+
+### Allow authentication between Server & Client Apps
+```
+oAuthPermissionId=$(az ad app show --id $aks_rbac_server_app_id --query "oauth2Permissions[0].id" -o tsv)
+```
+
+### Authenticate Server App and Client App 
+```
+az ad app permission add --id $aks_rbac_client_app_id --api $aks_rbac_server_app_id --api-permissions ${oAuthPermissionId}=Scope 
+
+az ad app permission grant --id $aks_rbac_client_app_id --api $aks_rbac_server_app_id
+```
+
+### 3.2 Create Azure AD Groups for Kubernetes RBAC Authentication
+
+### Create Kuberenets Cluster Admins AAD Group
+
+```
+aks_rbac_cluster_admins_group_id=$(az ad group create --display-name $aksadmingroup --mail-nickname $aksadmingroup --query objectId -o tsv)
+```
+
+### Assign AKS Cluster Admin role to the group
+
+```
+az role assignment create  --assignee $aks_rbac_cluster_admins_group_id  --role "Azure Kubernetes Service Cluster Admin Role"  --scope  /subscriptions/$subscriptionId 
+```
+
+### Create Kuberenetes Cluster Users AAD Group
+
+```
+aks_rbac_cluster_users_group_id=$(az ad group create --display-name $aksusergroup --mail-nickname $aksusergroup --query objectId -o tsv)
+```
+
+### Assign AKS Cluster Users role to the group
+```
+az role assignment create  --assignee $aks_rbac_cluster_users_group_id --role "Azure Kubernetes Service Cluster User Role"  --scope  /subscriptions/$subscriptionId 
+```
+
+### 3.3 Create Service Principal for AKS Cluser Creation
+Azure now supports managed identity for kubernetes clusters. But some times, the default permission for managed identity would not be enough for some operations such as assigning a public IP address to the ingress load balancer (using the helm chart example given in this lab)
+
+In future, Azure may enable 'bring your own managed identity' option for aks clusters. Currently there is no such option and the managed identity will be automatically created by Azure during the cluster creation. 
+
+So if there is any issue with cluster creation, check whether it is due to RBAC permissions. If that is the case, use the service principal created in this step. This can be done by changing the 'identity_type' to 'SP' instead of the default 'identity_type' which is 'SystemAssigned' in the module tf-azure-aks/variables.tf
+
+### Create Service Principal
+```
+az ad sp create-for-rbac --skip-assignment --name $SPName
+```
+
+### Get Service Principal Id
+```
+azure_client_id=$(az ad sp list --display-name  $SPName --query "[].appId" -o tsv)
+```
+
+### Get Service Principal Secret
+```
+azure_client_secret=$(az ad sp credential reset  --name $azure_client_id  --credential-description "spsecret"  --query password -o tsv)
+```
+
+### Assign 'contributor' role to the Service Principal
+```
+az role assignment create --assignee $azure_client_id --scope /subscriptions/$subscriptionId --role Contributor
+```
+
+### 3.4 Save the values
+```
+echo $aks_rbac_server_app_id
+echo $aks_rbac_server_app_secret
+echo $aks_rbac_client_app_id
+echo $aks_rbac_cluster_admins_group_id
+echo $aks_rbac_cluster_users_group_id
+echo $azure_client_id
+echo $azure_client_secret
+```
+
+Save these values safely and securely. Use thes values in variables.tf in the next lab.
+
+References: 
+
+1.	Create AAD Server and Client App: 
+https://docs.microsoft.com/en-us/azure/aks/azure-ad-integration-cli
+https://csa-ocp-ger.github.io/unicorn/challenges.aad.html
+2.	Create Service Principal 
+https://docs.microsoft.com/en-us/azure/aks/kubernetes-service-principal
+https://markheath.net/post/create-service-principal-azure-cli
+3.	Create Azure AD RBAC
+https://docs.microsoft.com/en-us/azure/aks/azure-ad-rbac
+4. Azure AKS Managed Identity
+https://docs.microsoft.com/en-us/azure/aks/use-managed-identity
+https://github.com/Azure/AKS/issues/1591
+
+
+## Lab 4: Setting up Terraform
 
 **NB!** In order to complete this lab you will need a `.env` file with your
 assigned Azure credentials! If you have not yet got it, please ask your
@@ -244,7 +424,7 @@ This should give an output like this:
 ...
 ```
 
-## Lab 4: Setting up AKS
+## Lab 5: Setting up AKS
 
 See `main.tf` for how to set up AKS and ACR.
 
@@ -270,7 +450,7 @@ kubectl get pods --all-namespaces
 
 [k8s-pods]: https://kubernetes.io/docs/concepts/workloads/pods/pod/
 
-## Lab 5: Set up Ingress Controller
+## Lab 6: Set up Ingress Controller
 
 * https://helm.sh/
 * https://traefik.io/
@@ -298,7 +478,7 @@ progress:
 kubectl get pods --all-namespaces --watch
 ```
 
-## Lab 6: Deploy a simple application
+## Lab 7: Deploy a simple application
 
 This lab your will learn to build and deploy a simple, multi-tier web
 application using Kubernetes and Docker. This example consists of the following
@@ -347,18 +527,18 @@ helm install \
   ./guestbook-chart
 ```
 
-## Lab 7: Automaion with Jenkins
+## Lab 8: Automaion with Jenkins
 
 
-## Lab 5: Build and deploy a simple application
-
-`TBA`
-
-## Lab 6: Set up cert-manager
+## Lab 9: Build and deploy a simple application
 
 `TBA`
 
-## Lab 7: Set up Prometheus and Grafana
+## Lab 10: Set up cert-manager
+
+`TBA`
+
+## Lab 11: Set up Prometheus and Grafana
 
 ### Install OLM (Operator Lifecycle Manager)
 
@@ -377,6 +557,6 @@ kubectl apply -f manifests/grafana-cr.yaml
 kubectl apply -f manifests/grafana-default-dashboards.yaml
 ```
 
-## Lab 8: Set up Istio (bonus)
+## Lab 12: Set up Istio (bonus)
 
 `TBA`
